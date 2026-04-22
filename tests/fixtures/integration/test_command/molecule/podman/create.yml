@@ -1,7 +1,7 @@
 ---
 - name: Create container instances
   hosts: localhost
-  gather_facts: false
+  gather_facts: true
   tasks:
     - name: Create containers from inventory
       containers.podman.podman_container:
@@ -14,6 +14,7 @@
         capabilities: "{{ hostvars[item]['container_capabilities'] | default(omit) }}"
         systemd: "{{ hostvars[item]['container_systemd'] | default(false) }}"
         log_driver: "{{ hostvars[item]['container_log_driver'] | default('json-file') }}"
+        uts: "{{ 'private' if ansible_facts.virtualization_type in ['container'] else omit }}"
         state: started
       register: result
       loop: "{{ groups['molecule'] }}"

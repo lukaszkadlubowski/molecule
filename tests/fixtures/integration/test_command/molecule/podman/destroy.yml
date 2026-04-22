@@ -12,7 +12,7 @@
     - name: Kill container if running
       containers.podman.podman_container:
         name: "{{ item.item }}"
-        state: stopped
+        state: absent
         timeout: 2
       loop: "{{ podman_infos.results }}"
       loop_control:
